@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+sqlmodel = "*"
+psycopg2-binary = "*"
+python-jose = "*"
+passlib = "*"
+email-validator = "*"
+bcrypt = "*"
+
+[requires]
+python_version = "3.11"
