@@ -6,22 +6,22 @@ from fastapi.responses import JSONResponse
 from app.routes import user_routes
 from app.database import engine
 from app.models import SQLModel
+from contextlib import asynccontextmanager
 
 # Add the root directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Create tables at startup
+    SQLModel.metadata.create_all(engine)
+    yield  # This will pause here until shutdown
+    # Any shutdown logic can go here if needed
+
+app = FastAPI(lifespan=lifespan)
 
 # Register routes
 app.include_router(user_routes.router)
-
-# Create tables
-def create_tables():
-    SQLModel.metadata.create_all(engine)
-
-@app.on_event("startup")
-async def startup():
-    create_tables()
 
 @app.get("/")
 def root():

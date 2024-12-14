@@ -39,8 +39,16 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login_user(user: UserLogin, db: Session = Depends(get_db)):
-    # Query the user by username
-    db_user = db.exec(select(User).where(User.username == user.username)).first()
+    # Check if the user exists by username, email, or mobile
+    db_user = (
+        db.exec(
+            select(User).where(
+                (User.username == user.username) |  # Check for username
+                (User.email == user.email) |        # Check for email
+                (User.mobile == user.mobile)         # Check for mobile
+            )
+        )
+    ).first()
     if not db_user or not verify_password(user.password, db_user.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid credentials")
     
