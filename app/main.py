@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI, Request, HTTPException
 import uvicorn
 from fastapi.responses import JSONResponse
-from app.routes import user_routes
+from app.routes import user_routes, file_upload
 from app.database import engine
 from app.models import SQLModel
 from contextlib import asynccontextmanager
@@ -21,7 +21,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # Register routes
-app.include_router(user_routes.router)
+app.include_router(user_routes.router, prefix="/api")
+app.include_router(file_upload.router, prefix="/api", tags=["file-upload"])
 
 @app.get("/")
 def root():

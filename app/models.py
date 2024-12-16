@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional, Union
 from pydantic import EmailStr, Field as PydanticField, field_validator, root_validator
+from typing import List
 
 class UserBase(SQLModel):
     first_name: str
@@ -39,3 +40,24 @@ class UserRead(UserBase):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     password: str
+
+class DeleteFilesRequest(SQLModel):
+    bucket_name: str
+    folder_name: str
+    filenames: List[str]
+
+    class Config:
+        min_anystr_length = 1
+        anystr_strip_whitespace = True
+
+
+# Request body model for the bucket creation request
+class CreateBucketRequest(SQLModel):
+    bucket_name: str
+
+# Request body model for creating folders with a bucket name
+class CreateFolderRequest(SQLModel):
+    bucket_name: str
+    folder_name: str
+
+

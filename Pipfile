@@ -12,6 +12,10 @@ python-jose = "*"
 passlib = "*"
 email-validator = "*"
 bcrypt = "*"
+python-multipart = "*"
+minio = "*"
+pydantic = "*"
+pydantic-settings = "*"
 
 [requires]
 python_version = "3.11"
